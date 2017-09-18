@@ -1,0 +1,47 @@
+/* 
+ * ReversibleQueue.java
+ * Emily Van Laarhoven
+ * CS230 Exam 2, Problem 3
+ * Due: 11/12/16 @11:59pm
+ */
+
+package javafoundations;
+
+import javafoundations.exceptions.*;
+
+public class ReversibleQueue<T> extends LinkedQueue<T> {
+  
+  /* 
+   * takes no arguments and reverses the elements stored in the queue
+   * using recursion with a base case of just two elements and flipping them
+   * by enqueueing the dequeued first element, and successively dequeuing 
+   * before the each reduced case and enqueueing after it is complete
+   */
+  public void reverse() {
+    if (this.size()<=2) { //base case size is 0, 1, or 2
+      this.enqueue(this.dequeue()); // dequeue first element if any and enqueue at end of queue
+    }
+    else {
+      T temp = this.dequeue();  //dequeue first element
+      reverse(); //recurse on queue of size n-1
+      this.enqueue(temp); //enqueue stored first element at end
+    }   
+  }
+  
+  /* 
+   * main method is for testing purposes only
+   */
+  public static void main (String [] args) {
+   ReversibleQueue<String> test = new ReversibleQueue<String>();
+   test.enqueue("A");
+   test.enqueue("B");
+   test.enqueue("C");
+   test.enqueue("D");
+   test.enqueue("E");
+   System.out.println("test = \n"+test);
+   test.reverse();
+   System.out.println("reverse = \n"+test);
+  }
+  
+  
+}
