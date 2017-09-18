@@ -1,0 +1,35 @@
+Welcome to DrJava.  Working directory is C:\Users\Emily\Desktop\exam2
+> run javafoundations.ReversibleQueue
+test = 
+<front of queue>
+A
+B
+C
+D
+E
+<rear of queue>
+reverse = 
+<front of queue>
+E
+D
+C
+B
+A
+<rear of queue>
+test2 = 
+<front of queue>
+1
+2
+3
+4
+5
+<rear of queue>
+reverse = 
+<front of queue>
+5
+4
+3
+2
+1
+<rear of queue>
+> 

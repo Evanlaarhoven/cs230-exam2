@@ -1,0 +1,130 @@
+﻿Emily Van Laarhoven
+CS230 Exam 2 Write Up
+Due: 11/12/16 @11:59pm
+
+
+Problem 1)
+
+
+The best programming practices I have learned so far are planning out my idea in abstract in advance, breaking down the problem into smaller pieces, and good debugging / testing skills.  Although I don’t think the first one is exactly what you’re asking about in this question because I can’t really demonstrate it in code snippets, I think it’s important to note that the one thing that has made my life so much easier over the course of the semester is sitting down with a pen and paper and drawing out the data structures needed and sketching the process with key points in pseudo-code.  I learned this from implementing PancakePile.java in SI with Sam as well as when working on the PalindromeChecker.java file with Stella in office hours.  Stella always draws out the stacks and goes through a simple example really meticulously to make sure that we’ve thought out all the details before we start coding (or debugging) and it helps so much to have a clear picture in mind and often helps us cut out chunks of unnecessary code.  I did this on ReversibleQueue.java for this exam.  First I drew out a queue of letters ABCDE and tried to think of how to reverse it. My first impulse was to copy the elements into an indexed data structure, but I decided to do a few smaller examples first.  I did the single element queue A - no reversal needed.  Then I did the queue AB and realized I could just use queue.enqueue(queue.dequeue()) to switch these two letters.  Then I struggled a little bit with ABC but eventually I realized that I could use recursion, which was an epiphany I wouldn’t have had if I immediately tried to copy the elements into another data structure.  In the end, my code looked so elegant and worked perfectly and I am so proud:
+
+
+  public void reverse() {
+    if (this.size()<=2) { //base case size is 0, 1, or 2
+      this.enqueue(this.dequeue()); // dequeue first element if any and enqueue at end of queue
+    }
+    else {
+      T temp = this.dequeue();  //dequeue first element
+      reverse(); //recurse on queue of size n-1
+      this.enqueue(temp); //enqueue stored first element at end
+    }   
+  }
+
+
+Along the same lines, another good programming practice that I am still working on is thinking before I code so I don’t write as much.  I like to just sit down and get right into coding, but that often leaves me with code like this, from the CorrectChange.java class, which is not at all concise and could have been done more eloquently by reusing the same variable instead of declaring a new one each time:
+
+
+    int twenties_remainder = makeChangeWithOneDenomination(cents,"$20 bills",2000); //will print number of $20 bills and return remaining cents
+    int tens_remainder = makeChangeWithOneDenomination(twenties_remainder,"$10 bills",1000); //will print number of $10 bills and return remaining cents
+    int fives_remainder = makeChangeWithOneDenomination(tens_remainder,"$5 bills",500); //will print number of $5 bills and return remaining cents
+    int ones_remainder = makeChangeWithOneDenomination(fives_remainder,"$1 bills",100); //will print number of $1 bills and return remaiing cents
+    int quarters_remainder = makeChangeWithOneDenomination(ones_remainder,"quarters",25); //will print number of quarters and return remaining cents
+    int dimes_remainder = makeChangeWithOneDenomination(quarters_remainder,"dimes",10); //will print number of dimes and return remaining cents
+    int nickels_remainder = makeChangeWithOneDenomination(dimes_remainder,"nickels",5); //will print number of nickels and return remaining cents
+    if (nickels_remainder !=0) {
+    System.out.println(nickels_remainder+" pennies"); //will print number of pennies
+
+
+As far as debugging and testing goes, I have consistently struggled to come up with cases that will potentially “break” my code.  In CorrectChange.java I only tested the given examples given to us in the problem set assignment, and didn’t think to test for the case of a negative input (I could have done so by using “ if (value >=0) “ instead of “ if (value!=0) “.)  At this point in the semester I’ve learned when there is a specific input needed to make sure I check for that in the code, but sometimes more specific cases still trip me up.  A specific case of this which I noted on this exam is that we had to account for the case where there are no cards left to deal out in the MemoryGame.java file.  To handle this I used an instance variable cardsLeft to keep track of when the cards had run out and made a special if/else statement to handle this case (just delete the match and don’t try to add new cards to the table).  However I didn’t even think of this during my own testing and I only caught it because of the hints when I re-read the question one last time.  
+
+
+Lastly, I have learned the power of thoughtfully inserted print statements while debugging.  On the most recent problem set my partner Hanae was really good at adding in print statements when we were working on both GuitarString.java and BoundedQueue.java.  I know the tutors tell us every time we ask in help room to add more print statements, but I tend to go about it haphazardly - I just add them all in at once wherever there might be a problem and then try to parse through all the things that print next time I run it.  Working with Hanae taught me that it’s worth it to spend the extra time developing a list of problem areas and then adding in print statements systematically, one at a time, to check if a certain method or part of the code is not working, and then commenting them out and moving on to the next one.  For example, we couldn’t get the pluck() method to work in GuitarString and we first looked at the BoundedQueue and tried to print that, and when we saw nothing was enqueuing we printed the random values we were generating.  We saw that the values were fine so then we tried printing the size of the queue, because a bounded queue will not enqueue if the maximum capacity is reached.  Lastly, we tried printing the size in the enqueue() method of BoundedQueue and then running pluck() and we saw that we were not dequeuing the zeroes that we had enqueued in the constructor of GuitarString, so the maximum capacity had already been reached.  I’m actually working with Hanae on the next assignment as well, so I’m looking forward to continuing to practice this skill and to spending less time frustrated and confused.
+
+
+
+
+Problem 2)
+
+
+a)  An example of a method that contains code that throws an exception without handling it is:
+
+
+import java.util.*;
+
+
+public class Prob2a {
+  
+  public static void main (String [] args)  throws InputMismatchException {
+    InputMismatchException ex = new InputMismatchException(“Please enter a valid double.”);
+    Scanner scan = new Scanner(System.in);
+    if (!(scan.nextLine().getClass.equals(“Double”)) throw ex;
+    double input = scan.nextDouble(); 
+    scan.close();
+    System.out.println(input);
+  } 
+  
+}
+
+
+This is a very simple example but this method will throw an InputMismatchException, which is a runtime exception, if the user enters a non-double into the scanner.  For example, when I run it and enter 2.25 the method prints the double 2.25, but when I enter hello as the input the code throws the exception.
+
+
+This method modified to handle the exception is:
+  
+  public static void main (String [] args) {
+    Scanner scan = new Scanner(System.in);
+    try {
+    double input = scan.nextDouble(); 
+    System.out.println(input);
+    } catch (InputMismatchException ex) {
+      System.out.println("Please enter a valid double");
+    }
+    scan.close();
+  } 
+  
+By using the try/catch here, if the user enters an input that is not a double the program will print “Please enter a valid double” rather than throwing an exception.
+
+
+
+
+b) Which of the following statements are true or false?
+
+
+i) This statement is true because the n^4 will dominate the expression because it increases much faster than n^2 or n.
+
+
+ii) This statement is false.  The runtime is O(n^3) because of the (½)n^3 term, which will increase faster than 10n^2 despite the fractional coefficient and thus dominate the expression.
+
+
+iii) This statement is false.  The exponential term 2^n will dominate the runtime of this expression, as exponentials always increase faster than polynomial terms for larger n.
+
+
+iv) This statement is true - see iii.
+
+
+v) This statement is true because the 3n^2log(n) term dominates the n^2 term from the expansion of (n+100)^2 because log(n) > 1 for all n greater than or equal to 10. 
+
+
+
+
+
+
+Problem 3) 
+
+
+b) What is the runtime of each of the following methods in ReversibleQueue?
+
+
+The method enqueue() has a runtime of O(n) = 1 because there are instance variables in LinkedQueue, the parent of ReversibleQueue, which keep track of the rear linear node and the count, so there is no need to iterate through the queue or do anything that depends on the size of the queue in order to set the next node at the end of the queue and increment the counter.
+
+
+The method dequeue() has a runtime of O(n) = 1 because there are instance variables in LinkedQueue which keep track of the front linear node and the count, so the method does not have to do anything that depends on the size of the queue to move the pointer of the front node to the second node in the queue and decrement the counter variable.
+
+
+The method isEmpty() has a runtime of O(n) = 1 because we have count, the number of items in the queue, stored as an instance variable, so the only thing that the method looks at is whether the count is equal to zero, which does not involve iterating through the queue.
+
+
+The method size() has a runtime of O(n)= 1 because count is stored as an instance variable so instead of having to iterate through the entire length of the queue the method just has to return this stored integer value.
+
+
+The method reverse() has a runtime of O(n) = 2(n-1) = 2n-2 which is essentially O(2n), which we could also consider to be O(n) since it’s an integer multiple of n.  This is because the method is recursive with a base case of n=2 in which 2 operations are performed, enqueue() and dequeue(), which both have O(1), and for each case larger than n=2 there is an additional enqueue() and an additional dequeue().

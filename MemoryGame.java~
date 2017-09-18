@@ -1,0 +1,71 @@
+/*
+ * MemoryGame.java
+ * Emily Van Laarhoven
+ * CS230 Problem 4
+ * Due: 11/12/16 @11:59pm
+ */
+
+import java.util.*;
+
+public class MemoryGame {
+  
+  //instance variables
+  int cardsLeft;
+  LinkedList<Card> table;
+  Deck myDeck;
+  boolean gameOver;
+  
+  public MemoryGame() {
+    gameOver = false;
+    cardsLeft=42; //starts at 52 total minus 10 cards on table
+    myDeck = new Deck(); //create a starter deck (in order)
+    myDeck.shuffle(); //shuffle the deck
+    table = new LinkedList<Card>(); //collection of cards on the table
+    for (int i=0; i<10; i++) {
+      table.add(myDeck.getNext());
+    }
+    
+    String welcome = "Welcome to the memory game. \n";
+    String goal = "Your goal is to match the cards in the deck in the fewest rounds.";
+    String startMsg = welcome+goal;
+    System.out.println(startMsg);
+    
+  }
+  
+  public void playOneRound() {
+    String instructions = "Pick the card number [1-10]. Type 0 to stop the game.";
+    System.out.prinln(instructions);
+    
+    Scanner scan = new Scanner(System.in);
+    int choice = scan.nextInt();
+    scan.close();
+    
+    if (choice==0) {
+      gameOver=true;
+    } else {
+      String print = "";
+      for (int j=1; j<11; j++) {
+        if (j==choice) {
+          Card guess = table.get(choice); //store card at index guessed
+          print+=guess.toString(); //add string representation to string to be printed
+          table.add(j,guess); //replace in linkedList of cards on the table
+        } else {
+          print+= "["+j+"]";
+        }
+      }
+      System.out.println(print);
+    }
+  }
+          
+      
+  public static void main (String [] args) {
+    MemoryGame test = new MemoryGame();
+    test.playOneRound();
+  }
+  
+}
+    
+    
+    
+    
+  
